@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Compute context similarity
+"""
+
 import sys,os,re,time
 from igraph import *
 
@@ -56,6 +63,17 @@ def catSim(fArticle, sArticle):
         secondACatExt.update(bfs[0][0:len(bfs[1])-1])
     
     return {'first':sorted(firstACatExt), 'second':sorted(secondACatExt)}
+
+def exploration(catName):
+    """
+    Returns the set of category name that are super category of this one
+    """
+    try:
+        cat_index_in_CatCat = gCatCat.vs.find(name=catName)
+        bfs = gCatCat.bfs(cat_index_in_CatCat, mode="out")
+        return {gArtCat.vs[cat]["name"] for cat in bfs[0][0:len(bfs[1])-1}
+    except ValueError:
+        return set()
 
 
 if __name__ == "__main__":
