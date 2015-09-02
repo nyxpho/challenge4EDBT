@@ -7,10 +7,11 @@ Compute context similarity
 
 import sys,os,re,time
 from igraph import *
+from main import *
 
-gArtArt = Graph.Read_Ncol("artart.txt", names=True, weights="if_present", directed=True)
-gArtCat = Graph.Read_Ncol("artcat.txt", names=True, weights="if_present", directed=True)
-gCatCat = Graph.Read_Ncol("catcat.txt", names=True, weights="if_present", directed=True)
+gArtArt = Graph.Read_Ncol("test/artart.txt", names=True, weights="if_present", directed=True)
+gArtCat = Graph.Read_Ncol("test/artcat.txt", names=True, weights="if_present", directed=True)
+gCatCat = Graph.Read_Ncol("test/catcat.txt", names=True, weights="if_present", directed=True)
 
 def inLinksSim(fArticle, sArticle):
     fArticleIn = gArtArt.neighbors(fArticle, mode="in")
@@ -22,63 +23,65 @@ def outLinksSim(fArticle, sArticle):
     sArticleOut = gArtArt.neighbors(sArticle, mode="out")
     return {'first':sorted(fArticleOut), 'second':sorted(sArticleOut)}
 
-# start with articles that already have a reference to each other
-def catSim(fArticle, sArticle):
-    start = time.time()
-    firstA = gArtArt.vs[fArticle]["name"]
-    secondA = gArtArt.vs[sArticle]["name"]
-    try:
-        indexFirstA = gArtCat.vs.find(name=firstA)
-    except ValueError:
-        return {'first':[], 'second':[]}
-    try:
-        indexSecondA = gArtCat.vs.find(name=secondA)
-    except ValueError:
-        return {'first':[], 'second':[]}
-    firstACat = gArtCat.neighbors(indexFirstA, mode="out")
-    secondACat = gArtCat.neighbors(indexSecondA,mode="out")
-    firstACatName = set([])
-    secondACatName = set([])
-    firstACatExt = set([])
-    secondACatExt = set([])
-    for cat in firstACat:
-        firstACatName.add(gArtCat.vs[cat]["name"])
-    for cat in secondACat:
-        secondACatName.add(gArtCat.vs[cat]["name"])
-    for cat in firstACatName:
-        try:
-            indexCat = gCatCat.vs.find(name=cat)
-        except ValueError:
-            continue
-        firstACatExt.add(indexCat.index)
-        bfs = gCatCat.bfs(indexCat.index, mode="out")
-        firstACatExt.update(bfs[0][0:len(bfs[1])-1])
-    for cat in secondACatName:
-        try:
-            indexCat = gCatCat.vs.find(name=cat)
-        except ValueError:
-            continue
-        secondACatExt.add(indexCat.index)
-        bfs = gCatCat.bfs(indexCat.index, mode="out")
-        secondACatExt.update(bfs[0][0:len(bfs[1])-1])
+def catSim1(fArticle, sArticle):
+    """
+    This function returns 2 lists of lists:
+    - the first list contains a list of the extended categories of the first article
+    - the second list contains a list of the extended categories of the second article
+    """
     
-    return {'first':sorted(firstACatExt), 'second':sorted(secondACatExt)}
+    fArticle = 'a'+str(fArticle)
+    sArticle = 'a'+str(sArticle)
+    firstACat = articleCat(fArticle)
+    secondACat = articleCat(sArticle)
+    firstList = []
+    for cat in firstACat:
+        firstList.append(exploration(cat))
+    secondList = []
+    for cat in secondACat:
+        secondList.append(exploration(cat))
+    return (firstList, secondList)
+
+
+def catSim(fArticle, sArticle):
+   fExt = [exploration(cat) for cat in articleCat('a'+str(fArticle))]
+   sExt = [exploration(cat) for cat in articleCat('a'+str(sArticle))]
+   if not fExt or not sExt:
+       return 0
+   fExtUnion = set.union(*fExt)
+   sExtUnion = set.union(*sExt)
+   wk12 = sum(1 for fext in fExt if fext.intersection(sExtUnion))
+   wk21 = sum(1 for sext in sExt if sext.intersection(fExtUnion))
+   return (min(wk12, wk21) / float(min(len(fExt),len(sExt))))
+
+   
+
+def articleCat(artName):
+    """
+    Return the set of categories an articles is contained in
+    """
+    try:
+        neighbors = gArtCat.neighbors(gArtCat.vs.find(name=artName), mode="out")
+        return {gArtCat.vs[catIndex]["name"] for catIndex in neighbors}
+    except ValueError:
+        return set()
+
 
 def exploration(catName):
     """
     Returns the set of category name that are super category of this one
     """
     try:
-        cat_index_in_CatCat = gCatCat.vs.find(name=catName)
-        bfs = gCatCat.bfs(cat_index_in_CatCat, mode="out")
-        return {gArtCat.vs[cat]["name"] for cat in bfs[0][0:len(bfs[1])-1}
+        cat_index_in_CatCat = gCatCat.vs.find(name=catName).index
+        bfsIt = gCatCat.bfsiter(cat_index_in_CatCat, mode="out")
+        explSet = {int(gCatCat.vs[cat.index]["name"][1:]) for cat in bfsIt}
+        explSet.add(int(catName[1:]))
+        return explSet
     except ValueError:
         return set()
 
 
 if __name__ == "__main__":
-    similarityCat = catSim(long(sys.argv[1]), long(sys.argv[2]))
-    print len(similarityCat['first'])
-    inSimilarity = inLinksSim(long(sys.argv[1]), long(sys.argv[2]))
-    print len(inSimilarity['first'])
-
+    print catSim('a1', 'a2')
+    me = catSim1(1, 2)
+    print smthg_sim(interSim, me['first'], me['second'])

@@ -137,6 +137,9 @@ def smthg_sim_equal(list1, list2):
 	
 	return min_wk_equal(list1, list2) / float(min(len(list1), len(list2)))
 
+def interSim(set1, set2):
+    return 1 if set1.intersection(set2) else 0
+
 
 def smthg_sim(sim_func, list1, list2):
 	"""
