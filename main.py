@@ -14,7 +14,8 @@ the stems
 
 """
 
-
+from contextSim import *
+from textSim import *
 
 def min_wk_equal(list1, list2):
 	"""
@@ -78,3 +79,13 @@ def smthg_sim(sim_func, list1, list2):
 	wk21 = sum(max(sim_func(b,a) for a in list1) for b in list2)
 	return min(wk12, wk21) / float(min(len(list1), len(list2)))
 
+
+def similarity(fArticle, sArticle):
+	"""
+	computes the similarity between two wikipedia articles based on context and text similarity
+	"""
+	const1 = 0.3
+	const2 = 0.3
+	context = const1*inLinksSim(fArticle, sArticle) + const2*outLinksSim(fArticle, sArticle) + (1-const1-const2)*catSim(fArticle, sArticle)
+	print inLinksSim(fArticle, sArticle), outLinksSim(fArticle, sArticle), catSim(fArticle, sArticle)
+	print context
