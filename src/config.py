@@ -3,7 +3,7 @@
 
 #Database acces
 POSTGRES_DATABASE = 's4_test'
-POSTGRES_USER = 'raphael'
+POSTGRES_USER = 'ara'
 POSTGRES_PASS = None
 
 #Table names:
