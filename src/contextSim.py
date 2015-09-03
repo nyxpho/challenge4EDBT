@@ -127,7 +127,7 @@ def retrieveNames(fArticle, sArticle):
 	try:
 		fName = gArtArt.vs[fArticle]["name"]
 		sName = gArtArt.vs[sArticle]["name"]
-		return (fName, sName)
+		return (fName, sName) 
 	except ValueError:
 		return (None,None)
 
