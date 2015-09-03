@@ -9,30 +9,20 @@
 \newcommand{\spara}[1]{\smallskip\noindent{\bf #1}}
 \newcommand{\mpara}[1]{\medskip\noindent{\bf #1}}
 \newcommand{\para}[1]{\noindent{\bf #1}}
-\newcommand{\NPhard}{{\ensuremath{\mathbf{NP}}-hard}}
-\newcommand{\bigO}{{\ensuremath{\cal O}}}
+
+\newcommand{\noargsim}{sim}
+\newcommand{\wsim}[2]{\noargsim(#1,#2)}
+\newcommand{\contextSim}[2]{\mathrm{ContextSim(#1,#2)}}
+\newcommand{\textSim}[2]{\mathrm{TextSim(#1,#2)}}
+\newcommand{\inLinks}[2]{\mathrm{inLinks(#1,#2)}}
+\newcommand{\outLinks}[2]{\mathrm{outLinks(#1,#2)}}
+\newcommand{\category}[2]{\mathrm{Category(#1,#2)}}
+\newcommand{\textfunc}[2]{Func(#1,#2)}
+\newcommand{\wikiJack}[3]{Wk_#1(#2,#3)}
+\newcommand{\Smthin}[3]{Smth_{#1}(#2,#3)}
+\newcommand{\cst}[1]{const_#1}
 
 \newcommand{\ignore}[1]{}
-%\newcommand{\ddense}{$k$-Densest\xspace}
-
-
-\AtBeginSection[]
-{
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
-
-
-
-%\AtBeginSection[]
-%{
-%  \begin{frame}
-%    \frametitle{Summary}
-%    \tableofcontents[currentsection]
-%  \end{frame}
-%}
 
 \begin{document}
 
@@ -45,10 +35,7 @@
 \end{frame}
 
 
-\begin{frame}
-\frametitle{Table of Contents}
-\tableofcontents
-\end{frame}
+
 
 
 \section{Challenge}
@@ -120,10 +107,34 @@ Similarity between the context of two pages:
 
 \end{frame}
 
-\begin{frame}{Similarity measure: }
+\begin{frame}{Similarity measure }
+
+We introduce the similarity, $\noargsim$ between two Wikipedia articles $a_1$ and $a_2$ as:
+
+\begin{align*}
+	\wsim{a_1}{a_2} =&\ \cst{0} \times \contextSim{a_1}{a_2} \\
+	& (1 - \cst{0}) \times \textSim{a_1}{a_2} \\
+	\end{align*}
 
 
+\end{frame}
 
+\begin{frame}{Similarity measure }
+	\begin{align*}
+	\contextSim{a_1}{a_2} =&\  \cst{1} \times \inLinks{a_1}{a_2}\\
+	 	& + \cst{2} \times \outLinks{a_1}{a_2}\\
+	 	& + \cst{3} \times \category{a_1}{a_2}\\
+	\\
+	\Smthin{f}{s1}{s2} =&\ \frac{min(\wikiJack{f}{s1}{s2}, \wikiJack{f}{s2}{s1})}{min(|s1|,|s2|)}\\
+\\
+	\inLinks{a_1}{a_2} =&\ \Smthin{isSamePage}{inLinks(a)}{inLinks(b)}\\
+	\\
+	\category{a_1}{a_2} =&\  \text{number of common categories (counting ancestors)}\\
+	\\
+	\textSim{a_1}{a_2} =&\  Smthing(synonym,Stemmed(a_1),Stemmed(a_2))\\
+	\\
+	\wikiJack{f}{s1}{s2} =&\ \sum\limits_{a \in s1} \max\limits_{b \in s2}(f(a,b))\\
+\end{align*}
 \end{frame}
 
 \begin{frame}{Complexity }
