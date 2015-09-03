@@ -124,6 +124,7 @@ class WikipediaDatabaseInterface(DatabaseInterface):
 		#id - title
 		self._execute("COPY %s FROM '%s'DELIMITER ',' CSV"
 			%(config.ARTICLE_ID_TABLE, path.join(csv_path,'articles_ids.csv'))
+		)
 		
 		#TODO:continue
 		##body
