@@ -1,0 +1,146 @@
+\documentclass[xcolor=dvipsnames]{beamer} 
+\usepackage{verbatim}
+\usepackage[utf8]{inputenc}
+
+\usetheme{CambridgeUS} 
+\usecolortheme{dolphin}
+\setbeamertemplate{items}[ball] 
+\setbeamertemplate{blocks}[rounded][shadow=true] 
+\newcommand{\spara}[1]{\smallskip\noindent{\bf #1}}
+\newcommand{\mpara}[1]{\medskip\noindent{\bf #1}}
+\newcommand{\para}[1]{\noindent{\bf #1}}
+\newcommand{\NPhard}{{\ensuremath{\mathbf{NP}}-hard}}
+\newcommand{\bigO}{{\ensuremath{\cal O}}}
+
+\newcommand{\ignore}[1]{}
+%\newcommand{\ddense}{$k$-Densest\xspace}
+
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+
+
+%\AtBeginSection[]
+%{
+%  \begin{frame}
+%    \frametitle{Summary}
+%    \tableofcontents[currentsection]
+%  \end{frame}
+%}
+
+\begin{document}
+
+
+\begin{frame}
+\title[Challenge 4]{Similarities in Wikipedia \\ EDBT Summer School 2015}
+\author[]{}
+\date{4.09.2015}
+\maketitle
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+
+\section{Challenge}
+
+\begin{frame}{Research challenge}
+ 
+\begin{center}
+\includegraphics[width=0.25\textwidth, height=0.4\paperheight]{wikilogo.eps}
+\end{center}
+
+Wikipedia is widely used as a source of information. 
+
+Users start from an initial page (topic). Often, they want to read more related information.
+
+\end{frame}
+
+\begin{frame}{Research challenge}
+
+Pages on Wikipedia link to each other.
+
+
+However:
+
+\begin{itemize}
+\item links might be missing between related articles
+\item different pairs of linked articles might be less/more similar
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Research challenge}
+
+Put an example !!!
+
+\end{frame}
+
+\begin{frame}{Research challenge}
+
+
+Challenge:
+
+\begin{itemize}
+\item compute similarity between articles
+\item infer new links between article
+\end{itemize}
+
+\end{frame}
+\section{Our approach}
+
+\begin{frame}{Content and context}
+
+Similarity between the content of two pages:
+
+
+
+
+\end{frame}
+
+\begin{frame}{Content and context}
+
+Similarity between the context of two pages:
+
+\begin{itemize}
+\item related pages link to common pages 
+\item related pages are linked by common pages
+\item Wikipedia uses categories for grouping together related pages
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Similarity measure: }
+
+
+
+\end{frame}
+
+\begin{frame}{Complexity }
+
+
+
+\end{frame}
+
+\section{Results}
+\begin{frame}{Implementation}
+
+igraph  PostgreSQL
+\end{frame}
+
+\begin{frame}{Results}
+
+\end{frame}
+
+
+\end{document}
