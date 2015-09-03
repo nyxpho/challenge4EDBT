@@ -1,0 +1,157 @@
+\documentclass[xcolor=dvipsnames]{beamer} 
+\usepackage{verbatim}
+\usepackage[utf8]{inputenc}
+
+\usetheme{CambridgeUS} 
+\usecolortheme{dolphin}
+\setbeamertemplate{items}[ball] 
+\setbeamertemplate{blocks}[rounded][shadow=true] 
+\newcommand{\spara}[1]{\smallskip\noindent{\bf #1}}
+\newcommand{\mpara}[1]{\medskip\noindent{\bf #1}}
+\newcommand{\para}[1]{\noindent{\bf #1}}
+
+\newcommand{\noargsim}{sim}
+\newcommand{\wsim}[2]{\noargsim(#1,#2)}
+\newcommand{\contextSim}[2]{\mathrm{ContextSim(#1,#2)}}
+\newcommand{\textSim}[2]{\mathrm{TextSim(#1,#2)}}
+\newcommand{\inLinks}[2]{\mathrm{inLinks(#1,#2)}}
+\newcommand{\outLinks}[2]{\mathrm{outLinks(#1,#2)}}
+\newcommand{\category}[2]{\mathrm{Category(#1,#2)}}
+\newcommand{\textfunc}[2]{Func(#1,#2)}
+\newcommand{\wikiJack}[3]{Wk_#1(#2,#3)}
+\newcommand{\Smthin}[3]{Smth_{#1}(#2,#3)}
+\newcommand{\cst}[1]{const_#1}
+
+\newcommand{\ignore}[1]{}
+
+\begin{document}
+
+
+\begin{frame}
+\title[Challenge 4]{Similarities in Wikipedia \\ EDBT Summer School 2015}
+\author[]{}
+\date{4.09.2015}
+\maketitle
+\end{frame}
+
+
+
+
+
+\section{Challenge}
+
+\begin{frame}{Research challenge}
+ 
+\begin{center}
+\includegraphics[width=0.25\textwidth, height=0.4\paperheight]{media/wikilogo.eps}
+\end{center}
+
+Wikipedia is widely used as a source of information. 
+
+Users start from an initial page (topic). Often, they want to read more related information.
+
+\end{frame}
+
+\begin{frame}{Research challenge}
+
+Pages on Wikipedia link to each other.
+
+
+However:
+
+\begin{itemize}
+\item links might be missing between related articles
+\item different pairs of linked articles might be less/more similar
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Research challenge}
+
+Put an example !!!
+
+\end{frame}
+
+\begin{frame}{Research challenge}
+
+
+Challenge:
+
+\begin{itemize}
+\item compute similarity between articles
+\item infer new links between article
+\end{itemize}
+
+\end{frame}
+\section{Our approach}
+
+\begin{frame}{Content and context}
+
+Similarity between the content of two pages:
+
+
+
+
+\end{frame}
+
+\begin{frame}{Content and context}
+
+Similarity between the context of two pages:
+
+\begin{itemize}
+\item related pages link to common pages 
+\item related pages are linked by common pages
+\item Wikipedia uses categories for grouping together related pages
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Similarity measure }
+
+We introduce the similarity, $\noargsim$ between two Wikipedia articles $a_1$ and $a_2$ as:
+
+\begin{align*}
+	\wsim{a_1}{a_2} =&\ \cst{0} \times \contextSim{a_1}{a_2} \\
+	& (1 - \cst{0}) \times \textSim{a_1}{a_2} \\
+	\end{align*}
+
+
+\end{frame}
+
+\begin{frame}{Similarity measure }
+	\begin{align*}
+	\contextSim{a_1}{a_2} =&\  \cst{1} \times \inLinks{a_1}{a_2}\\
+	 	& + \cst{2} \times \outLinks{a_1}{a_2}\\
+	 	& + \cst{3} \times \category{a_1}{a_2}\\
+	\\
+	\Smthin{f}{s1}{s2} =&\ \frac{min(\wikiJack{f}{s1}{s2}, \wikiJack{f}{s2}{s1})}{min(|s1|,|s2|)}\\
+\\
+	\inLinks{a_1}{a_2} =&\ \Smthin{isSamePage}{inLinks(a)}{inLinks(b)}\\
+	\\
+	\category{a_1}{a_2} =&\  \text{number of common categories (counting ancestors)}\\
+	\\
+	\textSim{a_1}{a_2} =&\  Smthing(synonym,Stemmed(a_1),Stemmed(a_2))\\
+	\\
+	\wikiJack{f}{s1}{s2} =&\ \sum\limits_{a \in s1} \max\limits_{b \in s2}(f(a,b))\\
+\end{align*}
+\end{frame}
+
+\begin{frame}{Complexity }
+
+
+
+\end{frame}
+
+\section{Results}
+\begin{frame}{Implementation}
+
+igraph  PostgreSQL
+\end{frame}
+
+\begin{frame}{Results}
+
+\end{frame}
+
+
+\end{document}
