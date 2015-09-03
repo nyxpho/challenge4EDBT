@@ -61,6 +61,16 @@ class DatabaseInterface(object):
 
 
 class WikipediaDatabaseInterface(DatabaseInterface):
+	"""
+	The interface to access the Wikipedia database
+	"""
+	
+	def create_tables(self):
+		#body
+		self._execute("DROP TABLE IF EXISTS %s" %config.BODY_TABLE)
+		self._execute("CREATE TABLE %s (index bigint PRIMARY KEY, body text)" %config.BODY_TABLE)
+		
+		#self._execute("CREATE INDEX index_name ON table_name (colname)")
 	
 	_select_text_body = ("SELECT body FROM " + config.BODY_TABLE +
 		" WHERE index = %s")

@@ -95,5 +95,3 @@ def wordnet(text):
 	pos = nltk.pos_tag(list(full_tokenize(text)))
 	return [wordnet_lemmatizer(word, get_wordnet_pos(tag)) for (word, tag) in pos]
 
-
-
