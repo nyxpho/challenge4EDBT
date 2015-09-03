@@ -9,7 +9,7 @@ def write(inPath, outPath, mode):
     cc - we put a 'c' in front of each index
     ac - a for first, c for  second
     """
-    f = open(stringPath)
+    f = open(inPath)
     line = f.readline()
     line = f.readline()
     rb = open(outPath, "w")
