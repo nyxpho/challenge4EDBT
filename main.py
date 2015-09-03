@@ -84,6 +84,7 @@ def similarity(fArticle, sArticle):
 	"""
 	computes the similarity between two wikipedia articles based on context and text similarity
 	"""
+
 	const1 = 0.3
 	const2 = 0.3
 	context = const1*inLinksSim(fArticle, sArticle) + const2*outLinksSim(fArticle, sArticle) + (1-const1-const2)*catSim(fArticle, sArticle)

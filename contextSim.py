@@ -27,7 +27,8 @@ def outLinksSim(fArticle, sArticle):
 	return len(fArticleOut.intersection(sArticleOut))/max(1, min(len(fArticleOut), len(sArticleOut)))
 
 def catSim1(fArticle, sArticle):
-	"""
+	
+    """
 	This function returns 2 lists of lists:
 	- the first list contains a list of the extended categories of the first article
 	- the second list contains a list of the extended categories of the second article
