@@ -140,9 +140,9 @@ def noArticles():
 	return gArtArt.vcount()
 
 def contextSim(fArticle, sArticle, cstes):
-	sim = cstes[1]*inLinksSim(fArticle, sArticle) +
+	sim = (cstes[1]*inLinksSim(fArticle, sArticle) +
 		cstes[2]*outLinksSim(fArticle, sArticle) +
-		(1-cstes[1]-cstes[2])*catSim(fArticle, sArticle)
+		(1-cstes[1]-cstes[2])*catSim(fArticle, sArticle))
 	print inLinksSim(fArticle, sArticle), outLinksSim(fArticle, sArticle), catSim(fArticle, sArticle)
 	print sim
 	return sim
