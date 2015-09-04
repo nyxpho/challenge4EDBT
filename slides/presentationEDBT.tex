@@ -178,7 +178,7 @@ We extend the Jaccard similarity coefficient to account for the specifics of Wik
 Observe that this new coefficient preserves the similarity between two sets if one or both are extended with similar content and that $ 0 \leq \wikiJack{f}{S_1}{S_2} \leq 1 $.
 
 \begin{block}{The original Jaccard similarity}
-$$J(S_1,S_2) = \frac{\sum\limits_{a \in S_1} \max\limits_{b \in S_2}(\delta(a,b))}{|S_1 \cup S_1|}$$
+$$J(S_1,S_2) = \frac{\sum\limits_{a \in S_1} \max\limits_{b \in S_2}(\delta(a,b))}{|S_1 \cup S_2|}$$
 \end{block}
 \end{frame}
 
@@ -196,13 +196,14 @@ We apply this measure on all our sources of similarity:
 	\\
 	\textSim{a_1}{a_2} =&\  \wikiJack{isSynonym}{Stemmed(a_1)}{Stemmed(a_2)}\\
 \end{align*}
+
 \end{frame}
 
 
 \begin{frame}{Sources of similarity}{Categories}
 
 
-What is the similarity between articles $a_1$ and $a_2$  if we take into account the categories they belong to and the relations between categories?
+What is the similarity between articles $a_1$ and $a_2$ if we take into account the categories they belong to and the relations between categories?
 
 
 \begin{center}
@@ -294,5 +295,13 @@ We obtained for example:
 
 \end{frame}
 
+\begin{frame}{Future work}
+
+\begin{itemize}
+\item Use the article similarity to compute the similarity of the in and out links, instead of checking if they are the same.
+\item Have an interactive way to consult this similarity.
+\end{itemize}
+
+\end{frame}
 
 \end{document}
