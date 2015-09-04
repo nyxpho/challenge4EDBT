@@ -25,10 +25,22 @@
 
 \newcommand{\ignore}[1]{}
 
-\begin{document}
-
-
-\begin{frame}
+\defbeamertemplate*{footline}{my infolines theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor~~\insertshortinstitute
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
 \title[Challenge 4]{Similarities in Wikipedia \\ EDBT Summer School 2015}
 \author[Oana, Raphaël]{Oana Balalau\inst{1}, Raphaël Bonaque\inst{2}}
 \institute[]{
@@ -37,7 +49,14 @@ Télécom ParisTech University
 \inst{2}
 Inria Saclay \^Ile-de-France
 }
-\date{}
+\date[EDBT 2015]{}
+
+
+\begin{document}
+
+
+\begin{frame}
+
 \maketitle
 \end{frame}
 
