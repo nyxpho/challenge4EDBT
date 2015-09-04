@@ -8,13 +8,13 @@ Compute context similarity
 import sys,os,re,time
 from igraph import *
 
-gArtArt = Graph.Read_Ncol("artart.txt", names=True, weights="if_present", directed=True)
-gArtCat = Graph.Read_Ncol("artcat.txt", names=True, weights="if_present", directed=True)
-gCatCat = Graph.Read_Ncol("catcat.txt", names=True, weights="if_present", directed=True)
+gArtArt = Graph.Read_Ncol("../artart.txt", names=True, weights="if_present", directed=True)
+gArtCat = Graph.Read_Ncol("../artcat.txt", names=True, weights="if_present", directed=True)
+gCatCat = Graph.Read_Ncol("../catcat.txt", names=True, weights="if_present", directed=True)
 
-print "size of artart " + str(len(gArtArt.vs))
-print "size of catcat " + str(len(gCatCat.vs))
-print "size of artcat " + str(len(gArtCat.vs))
+#print "size of artart " + str(len(gArtArt.vs))
+#print "size of catcat " + str(len(gCatCat.vs))
+#print "size of artcat " + str(len(gArtCat.vs))
 
 def inLinksSim(fArticle, sArticle):
 	if fArticle[0] != 'a':
@@ -79,21 +79,21 @@ def catSim(fArticle, sArticle):
 		return 0
 	fExtUnion = set.union(*fExt)
 	sExtUnion = set.union(*sExt)
-	print fArticle +" " + sArticle + "\nfirst part "
+	#print fArticle +" " + sArticle + "\nfirst part "
 	wk12 = 0
 	for fext in fExt:
 		inters = fext.intersection(sExtUnion)
 		if len(inters) > 0:
-			print inters
+			#print inters
 			wk12 +=1
 	wk21 = 0
-	print "\nsecond part"
+	#print "\nsecond part"
 	for sext in sExt:
 		inters = sext.intersection(fExtUnion)
 		if len(inters) > 0:
-			print inters
+			#print inters
 			wk21 += 1
-	print "\n"
+	#print "\n"
 	#wk12 = sum(1 for fext in fExt if fext.intersection(sExtUnion))
 	#wk21 = sum(1 for sext in sExt if sext.intersection(fExtUnion))
 	return (min(wk12, wk21) / float(max(1, min(len(fExt),len(sExt)))))
@@ -115,9 +115,14 @@ def exploration(catName):
 	"""
 	try:
 		cat_index_in_CatCat = gCatCat.vs.find(name=catName).index
-		bfsIt = gCatCat.bfsiter(cat_index_in_CatCat, mode="out")
-		#print depth
-		explSet = {gCatCat.vs[cat.index]["name"] for cat in bfsIt}
+		bfsIt = gCatCat.bfsiter(cat_index_in_CatCat, mode="out", advanced=True)
+		#print type(bfsIt)
+		explSet = set() 
+		for [cat,a,_] in bfsIt:
+			if a < 3:
+				explSet.add(gCatCat.vs[cat.index]["name"])
+			else:
+			   break
 		explSet.add(catName)
 		return explSet
 	except ValueError:
