@@ -8,9 +8,9 @@ Compute context similarity
 import sys,os,re,time
 from igraph import *
 
-gArtArt = Graph.Read_Ncol("../artart.txt", names=True, weights="if_present", directed=True)
-gArtCat = Graph.Read_Ncol("../artcat.txt", names=True, weights="if_present", directed=True)
-gCatCat = Graph.Read_Ncol("../catcat.txt", names=True, weights="if_present", directed=True)
+gArtArt = Graph.Read_Ncol("./data/artart.txt", names=True, weights="if_present", directed=True)
+gArtCat = Graph.Read_Ncol("./data/artcat.txt", names=True, weights="if_present", directed=True)
+gCatCat = Graph.Read_Ncol("./data/catcat.txt", names=True, weights="if_present", directed=True)
 
 #print "size of artart " + str(len(gArtArt.vs))
 #print "size of catcat " + str(len(gCatCat.vs))
@@ -139,7 +139,7 @@ def retrieveNames(fArticle, sArticle):
 def noArticles():
 	return gArtArt.vcount()
 
-def contextSim(fArticle, sArticle, cstes)
+def contextSim(fArticle, sArticle, cstes):
 	sim = cstes[1]*inLinksSim(fArticle, sArticle) +
 		cstes[2]*outLinksSim(fArticle, sArticle) +
 		(1-cstes[1]-cstes[2])*catSim(fArticle, sArticle)
