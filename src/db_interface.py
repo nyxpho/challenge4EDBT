@@ -168,10 +168,15 @@ class WikipediaDatabaseInterface(DatabaseInterface):
 	
 	
 	_select_share_inlink_query = (
-		"SELECT ln2.article_to FROM "+ config.LINK_TABLE + " ln1 "
-		"JOIN " + config.LINK_TABLE + " ln2 ON ln1.article_from = ln2.article_from "
-		"WHERE ln1.article_to = %s"
+		"SELECT DISTINCT article_to FROM " + config.LINK_TABLE + " "
+		"WHERE article_from IN "
+			"(SELECT article_from FROM " + config.LINK_TABLE + " WHERE article_to=%s)"
 	)
+	#(
+		#"SELECT ln2.article_to FROM "+ config.LINK_TABLE + " ln1 "
+		#"JOIN " + config.LINK_TABLE + " ln2 ON ln1.article_from = ln2.article_from "
+		#"WHERE ln1.article_to = %s"
+	#)
 	
 	def get_share_inlink(self, index):
 		"""
@@ -180,10 +185,15 @@ class WikipediaDatabaseInterface(DatabaseInterface):
 		return self._get_special_cursor_iterator(self._select_share_inlink_query, (index,))
 	
 	
+	#_select_share_outlink_query = (
+		#"SELECT ln2.article_from FROM "+ config.LINK_TABLE + " ln1 "
+		#"JOIN " + config.LINK_TABLE + " ln2 ON ln1.article_to = ln2.article_to "
+		#"WHERE ln1.article_from = %s"
+	#)
 	_select_share_outlink_query = (
-		"SELECT ln2.article_from FROM "+ config.LINK_TABLE + " ln1 "
-		"JOIN " + config.LINK_TABLE + " ln2 ON ln1.article_to = ln2.article_to "
-		"WHERE ln1.article_from = %s"
+		"SELECT DISTINCT article_from FROM " + config.LINK_TABLE + " "
+		"WHERE article_to IN "
+			"(SELECT article_to FROM " + config.LINK_TABLE + " WHERE article_from=%s)"
 	)
 	
 	def get_share_outlink(self, index):
