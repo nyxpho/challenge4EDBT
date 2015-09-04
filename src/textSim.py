@@ -35,6 +35,12 @@ def download_ressources():
 	nltk.download('maxent_treebank_pos_tagger') # POS tagger
 	nltk.download('wordnet') # Wordnet ...
 
+if __name__ = "__main__":
+	print "Downloading the neccessary resources"
+	download_ressources()
+	print "Done"
+
+
 ################################################################################
 #Global variables
 ####
@@ -96,17 +102,19 @@ def full_stem(text, stemmer=lancaster_stemmer):
 	#return STANDFORD_PARSER.raw_parse_sents(text)
 
 def get_wordnet_pos(treebank_tag):
-
-    if treebank_tag.startswith('J'):
-        return wordnet.ADJ
-    elif treebank_tag.startswith('V'):
-        return wordnet.VERB
-    elif treebank_tag.startswith('N'):
-        return wordnet.NOUN
-    elif treebank_tag.startswith('R'):
-        return wordnet.ADV
-    else:
-        return ''
+	"""
+	POS tagconverter from treebank tags to wordnet tags
+	"""
+	if treebank_tag.startswith('J'):
+		return wordnet.ADJ
+	elif treebank_tag.startswith('V'):
+		return wordnet.VERB
+	elif treebank_tag.startswith('N'):
+		return wordnet.NOUN
+	elif treebank_tag.startswith('R'):
+		return wordnet.ADV
+	else:
+		return ''
 
 def wordnet(text):
 	global wordnet_lemmatizer
@@ -121,9 +129,3 @@ def fast_text_sim(article_1_index, article_2_index):
 	article_1_stem = full_stem(WDI.get_body_text_by_index(article_1_index))
 	article_2_stem = full_stem(WDI.get_body_text_by_index(article_2_index))
 	return utils.smthg_sim_equal(article_1_stem, article_2_stem)
-
-
-if __name__ = "__main__":
-	print "Downloading the neccessary resources"
-	download_ressources()
-	print "Done"
