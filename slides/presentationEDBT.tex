@@ -170,15 +170,15 @@ intersect & different\\
 \begin{frame}
 We extend the Jaccard similarity coefficient to account for the specifics of Wikipedia:
 \begin{align*}	
-\wikiJack{f}{s1}{S_2} =&\ \frac{min(\setProximity{f}{s1}{S_2}, \setProximity{f}{S_2}{s1})}{min(|s1|,|S_2|)}\\
+\wikiJack{f}{S_1}{S_2} =&\ \frac{min(\setProximity{f}{S_1}{S_2}, \setProximity{f}{S_2}{S_1})}{min(|S_1|,|S_2|)}\\
 \\
-\setProximity{f}{s1}{S_2} =&\ \sum\limits_{a \in s1} \max\limits_{b \in S_2}(f(a,b))\\
+\setProximity{f}{S_1}{S_2} =&\ \sum\limits_{a \in S_1} \max\limits_{b \in S_2}(f(a,b))\\
 \end{align*}
 
 Observe that this new coefficient preserves the similarity between two sets if one or both are extended with similar content and that $ 0 \leq \wikiJack{f}{S_1}{S_2} \leq 1 $.
 
 \begin{block}{The original Jaccard similarity}
-$$$$
+$$J(S_1,S_2) = \frac{\sum\limits_{a \in S_1} \max\limits_{b \in S_2}(\delta(a,b))}{|S_1 \cup S_1|}$$
 \end{block}
 \end{frame}
 
