@@ -36,7 +36,7 @@ if __name__ == "__main__":
 		('categories_relations', 'catcat', 'cc')
 	]
 	
-	for (inName, outName, mode) in transformation_list
+	for (inName, outName, mode) in transformation_list:
 		inPath = path.join(inDir,inName+'.csv')
 		outPath = path.join(outDir,inName+'.txt')
 		writeTransformation(inPath, outPath, mode)
