@@ -10,6 +10,7 @@
 \newcommand{\mpara}[1]{\medskip\noindent{\bf #1}}
 \newcommand{\para}[1]{\noindent{\bf #1}}
 
+\newcommand{\bigO}{{\ensuremath{\cal O}}}
 \newcommand{\noargsim}{sim}
 \newcommand{\wsim}[2]{\noargsim(#1,#2)}
 \newcommand{\contextSim}[2]{\mathrm{ContextSim(#1,#2)}}
@@ -18,8 +19,8 @@
 \newcommand{\outLinks}[2]{\mathrm{outLinks(#1,#2)}}
 \newcommand{\category}[2]{\mathrm{Category(#1,#2)}}
 \newcommand{\textfunc}[2]{Func(#1,#2)}
-\newcommand{\wikiJack}[3]{Wk_#1(#2,#3)}
-\newcommand{\Smthin}[3]{Smth_{#1}(#2,#3)}
+\newcommand{\wikiJack}[3]{Wk_{#1}(#2,#3)}
+\newcommand{\setProximity}[3]{Prox_{#1}(#2,#3)}
 \newcommand{\cst}[1]{const_#1}
 
 \newcommand{\ignore}[1]{}
@@ -29,8 +30,14 @@
 
 \begin{frame}
 \title[Challenge 4]{Similarities in Wikipedia \\ EDBT Summer School 2015}
-\author[]{}
-\date{4.09.2015}
+\author[Oana, Raphaël]{Oana Balalau\inst{1}, Raphaël Bonaque\inst{2}}
+\institute[]{
+\inst{1}
+Télécom ParisTech University
+\inst{2}
+Inria Saclay \^Ile-de-France
+}
+\date{}
 \maketitle
 \end{frame}
 
@@ -40,7 +47,7 @@
 
 \section{Challenge}
 
-\begin{frame}{Research challenge}
+\begin{frame}{Wikipedia}
  
 \begin{center}
 \includegraphics[width=0.25\textwidth, height=0.4\paperheight]{media/wikilogo.eps}
@@ -48,105 +55,159 @@
 
 Wikipedia is widely used as a source of information. 
 
-Users start from an initial page (topic). Often, they want to read more related information.
+Users start from an article and often want more related information.
 
 \end{frame}
 
-\begin{frame}{Research challenge}
+\begin{frame}{Finding related information}
 
-Pages on Wikipedia link to each other.
-
-
-However:
+Users can obtain more information via links on the page. However:
 
 \begin{itemize}
-\item links might be missing between related articles
-\item different pairs of linked articles might be less/more similar
+\item links to similar articles might be missing
+\item evaluating existing links relevance is hard
 \end{itemize}
 
-\end{frame}
-
-
-\begin{frame}{Research challenge}
 
 Put an example !!!
 
+%\begin{block}{Goal}
+%Computing
+%\end{block}
+
 \end{frame}
 
-\begin{frame}{Research challenge}
+\begin{frame}{Challenge}
 
 
-Challenge:
+\begin{center}
+
 
 \begin{itemize}
-\item compute similarity between articles
-\item infer new links between article
+\item Compute similarity between articles.
+\bigskip
+\item Infer new links between articles.
 \end{itemize}
 
+\includegraphics[width=0.5\textwidth, height=0.2\paperheight]{media/challenge.eps}
+
+\end{center}
+
 \end{frame}
+
 \section{Our approach}
 
-\begin{frame}{Content and context}
-
-Similarity between the content of two pages:
+\begin{frame}{When are two pages similar?}
 
 
+\hspace{-2mm}\begin{minipage}{.28\textwidth}
 
-
-\end{frame}
-
-\begin{frame}{Content and context}
-
-Similarity between the context of two pages:
+\begin{block}{Sources of similarity}
 
 \begin{itemize}
-\item related pages link to common pages 
-\item related pages are linked by common pages
-\item Wikipedia uses categories for grouping together related pages
+\item Text
+
+\bigskip
+
+\item Context
+\begin{itemize}
+\item Inlinks
+\item Outlinks
+\item Categories
+\end{itemize}
 \end{itemize}
 
+\end{block}
+
+\end{minipage}
+
+
+\begin{minipage}{.8\textwidth}
+
+\end{minipage}
+%Pages discussing related events/topics/concepts use a common set of words.
+
+%\bigskip
+
+%We can find the same words used in similar pages, but sometimes we find synonyms.  
+
+
+
 \end{frame}
 
-\begin{frame}{Similarity measure }
+%\begin{frame}{Intuition: Context}
 
-We introduce the similarity, $\noargsim$ between two Wikipedia articles $a_1$ and $a_2$ as:
+
+%Related pages link to common pages.
+%\bigskip 
+
+%Related pages are linked by common pages.
+%\bigskip
+
+%Wikipedia uses categories for grouping together related pages
+
+
+%\end{frame}
+
+\begin{frame}
+We extend the Jaccard similarity coefficient to account for the specifics of Wikipedia:
+\begin{align*}	
+\wikiJack{f}{s1}{s2} =&\ \frac{min(\setProximity{f}{s1}{s2}, \setProximity{f}{s2}{s1})}{min(|s1|,|s2|)}\\
+\\
+\setProximity{f}{s1}{s2} =&\ \sum\limits_{a \in s1} \max\limits_{b \in s2}(f(a,b))\\
+\end{align*}
+
+Observe that this new coefficient preserves the similarity between two sets if one or both are extended with similar content.
+  
+\end{frame}
+
+
+\begin{frame}
+
+We apply this measure on all our sources of similarity: 
 
 \begin{align*}
-	\wsim{a_1}{a_2} =&\ \cst{0} \times \contextSim{a_1}{a_2} \\
-	& (1 - \cst{0}) \times \textSim{a_1}{a_2} \\
-	\end{align*}
-
-
-\end{frame}
-
-\begin{frame}{Similarity measure }
-	\begin{align*}
-	\contextSim{a_1}{a_2} =&\  \cst{1} \times \inLinks{a_1}{a_2}\\
-	 	& + \cst{2} \times \outLinks{a_1}{a_2}\\
-	 	& + \cst{3} \times \category{a_1}{a_2}\\
+	\inLinks{a_1}{a_2} =&\ \wikiJack{isSamePage}{inLinks(a_1)}{inLinks(a_2)}\\
 	\\
-	\Smthin{f}{s1}{s2} =&\ \frac{min(\wikiJack{f}{s1}{s2}, \wikiJack{f}{s2}{s1})}{min(|s1|,|s2|)}\\
-\\
-	\inLinks{a_1}{a_2} =&\ \Smthin{isSamePage}{inLinks(a)}{inLinks(b)}\\
+	\outLinks{a_1}{a_2} =&\ \wikiJack{isSamePage}{outLinks(a_1)}{outLinks(a_2)}\\
 	\\
-	\category{a_1}{a_2} =&\  \text{number of common categories (counting ancestors)}\\
+	\category{a_1}{a_2} =&\  \wikiJack{intersects}{superCat_3(a_1)}{superCat_3(a_2)}\\
 	\\
-	\textSim{a_1}{a_2} =&\  Smthing(synonym,Stemmed(a_1),Stemmed(a_2))\\
-	\\
-	\wikiJack{f}{s1}{s2} =&\ \sum\limits_{a \in s1} \max\limits_{b \in s2}(f(a,b))\\
+	\textSim{a_1}{a_2} =&\  \wikiJack{isSynonym}{Stemmed(a_1)}{Stemmed(a_2)}\\
 \end{align*}
 \end{frame}
 
-\begin{frame}{Complexity }
+\begin{frame}{Wikipedia similarity}
 
+By aggregating the previous components, we get the Wikipedia coefficient of similarity $\wsim$:
 
+\begin{align*}
+	\wsim{a_1}{a_2} =&\ &\cst{0} \times \contextSim{a_1}{a_2} \\
+	& + &(1 - \cst{0}) \times \textSim{a_1}{a_2} \\
+	\\
+	\contextSim{a_1}{a_2} =&\ &\cst{1} \times \inLinks{a_1}{a_2}\\
+	 	& + &\cst{2} \times \outLinks{a_1}{a_2}\\
+	 	& + &(1 - \cst{1} - \cst{2}) \times \category{a_1}{a_2}\\
+\end{align*}
+
+where $a_1$ and $a_2$ are two Wikipedia articles. The constants need to be fine tuned by experimental evaluation. 
 
 \end{frame}
+
 
 \section{Results}
 \begin{frame}{Implementation}
 
-igraph  PostgreSQL
+Python
+
+\bigskip
+
+PostgreSQL
+
+\bigskip
+
+The code is available at \url{https://github.com/nyxpho/challenge4EDBT}
+
 \end{frame}
 
 \begin{frame}{Results}
