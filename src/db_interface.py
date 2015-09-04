@@ -117,8 +117,11 @@ class WikipediaDatabaseInterface(DatabaseInterface):
 	def populate_tables(self, csv_path):
 		"""
 		Use the csv files to populate the tables
-		"""
 		
+		@Warning: this suppose that the files are correctl formated WHICH IS NOT
+		THE CASE OF THE FILES IN THE ARCHIVES. YOU SHOULD PROBABLY s/\x00/ and
+		article_body and then remove the lastline of each csv
+		"""
 		csv_path = path.abspath(csv_path)
 		
 		#id - title
@@ -128,33 +131,19 @@ class WikipediaDatabaseInterface(DatabaseInterface):
 		
 		#TODO:continue
 		##body
-		#if autodrop: self._execute("DROP TABLE IF EXISTS %s" %config.BODY_TABLE)
-		#self._execute("CREATE TABLE %s (index bigint PRIMARY KEY, body text)" %config.BODY_TABLE)
-		
+		#config.BODY_TABLE (index bigint PRIMARY KEY, body text)
+		#
 		##links
-		#if autodrop: self._execute("DROP TABLE IF EXISTS %s" %config.LINK_TABLE)
-		#self._execute("CREATE TABLE %s (article_from text, article_to text)" %config.LINK_TABLE)
-		#self._execute("ALTER TABLE %s ADD CONSTRAINT "
-			#"chal4_link_pk PRIMARY KEY (article_from, article_to)" %config.LINK_TABLE)
-		#self._execute("CREATE INDEX ON %s (article_from)" %config.LINK_TABLE)
-		#self._execute("CREATE INDEX ON %s (article_to)" %config.LINK_TABLE)
-		
+		# config.LINK_TABLE (article_from text, article_to text)
+		#
 		##category id - title
-		#if autodrop: self._execute("DROP TABLE IF EXISTS %s" %config.CATEGORY_ID_TABLE)
-		#self._execute("CREATE TABLE %s (cat_index bigint PRIMARY KEY, cat_title text)" %config.CATEGORY_ID_TABLE)
-		#self._execute("CREATE UNIQUE INDEX ON %s (cat_title)" %config.CATEGORY_ID_TABLE)
-		
+		#config.CATEGORY_ID_TABLE (cat_index bigint PRIMARY KEY, cat_title text)
+		#
 		##article - category
-		#if autodrop: self._execute("DROP TABLE IF EXISTS %s" %config.ARTICLE_CATEGORY_TABLE)
-		#self._execute("CREATE TABLE %s (index bigint NOT NULL, cat_index bigint NOT NULL)" %config.ARTICLE_CATEGORY_TABLE)
-		#self._execute("ALTER TABLE %s ADD CONSTRAINT "
-			#"chal4_art_cat_pk PRIMARY KEY (index, cat_index)" %config.ARTICLE_CATEGORY_TABLE)
-		
+		# config.ARTICLE_CATEGORY_TABLE (index bigint NOT NULL, cat_index bigint NOT NULL)
+		#
 		##subcategory - category
-		#if autodrop: self._execute("DROP TABLE IF EXISTS %s" %config.SUBCATEGORY_TABLE)
-		#self._execute("CREATE TABLE %s (sub_cat bigint NOT NULL, super_cat bigint NOT NULL)" %config.SUBCATEGORY_TABLE)
-		#self._execute("ALTER TABLE %s ADD CONSTRAINT "
-			#"chal4_subcat_pk PRIMARY KEY (sub_cat, super_cat)" %config.SUBCATEGORY_TABLE)
+		#config.SUBCATEGORY_TABLE (sub_cat bigint NOT NULL, super_cat bigint NOT NULL)
 		
 		self.commit()
 	

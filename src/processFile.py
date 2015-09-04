@@ -1,7 +1,8 @@
-import sys,os,re,time
+import sys
+from os import path
 from igraph import *
 
-def write(inPath, outPath, mode):
+def writeTransformation(inPath, outPath, mode):
     """
     Parses the file in inPath and writes in the required format in outPath
     The parameter mode will determine if 
@@ -10,20 +11,35 @@ def write(inPath, outPath, mode):
     ac - a for first, c for  second
     """
     f = open(inPath)
-    line = f.readline()
-    line = f.readline()
     rb = open(outPath, "w")
-    while line is not None:
-        line = line.replace("\"","")
-        ids = line.strip().split(",")
-        if mode =='aa':
-            rb.write('a'+ids[0]+ " " + 'a'+ids[1]+"\n")
-        if mode =='ac':
-            rb.write('a'+ids[0]+ " " + 'c'+ids[1]+"\n")
-        if mode =='cc':
-            rb.write('c'+ids[0]+ " " + 'c'+ids[1]+"\n")
-        line = f.readline()
+    
+    if mode =='aa':
+        mode_str= 'a%s a%s\n'
+    if mode =='ac':
+        mode_str= 'a%s c%s\n'
+    if mode =='cc':
+        mode_str= 'c%s c%s\n'
+    
+    line = f.readline() #skip the first line of header
+    for line in f:
+        ids = line.replace("\"","").strip().split(",")
+        if len(ids) == 2:
+            rb.write(mode_str %(ids[0], ids[1]))
+    
     rb.close()
+    f.close()
 
 if __name__ == "__main__":
-    write(sys.argv[1], sys.argv[2],sys.argv[3])
+	inDir = sys.argv[1] if len(sys.argv)>1 else '.'
+	outDir = sys.argv[2] if len(sys.argv)>2 else inDir
+	
+	transformation_list = [
+		('articles_links', 'artart', 'aa'),
+		('article_category', 'artcat','ac'),
+		('categories_relations', 'catcat', 'cc')
+	]
+	
+	for (inName, outName, mode) in transformation_list:
+		inPath = path.join(inDir,inName+'.csv')
+		outPath = path.join(outDir,inName+'.txt')
+		writeTransformation(inPath, outPath, mode)
