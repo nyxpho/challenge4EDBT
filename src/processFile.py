@@ -1,7 +1,8 @@
-import sys,os,re,time
+import sys
+from os import path
 from igraph import *
 
-def write(inPath, outPath, mode):
+def writeTransformation(inPath, outPath, mode):
     """
     Parses the file in inPath and writes in the required format in outPath
     The parameter mode will determine if 
@@ -26,4 +27,16 @@ def write(inPath, outPath, mode):
     rb.close()
 
 if __name__ == "__main__":
-    write(sys.argv[1], sys.argv[2],sys.argv[3])
+	inDir = sys.argv[1] if len(sys.argv)>1 else '.'
+	outDir = sys.argv[2] if len(sys.argv)>2 else inDir
+	
+	transformation_list = [
+		('articles_links', 'artart', 'aa'),
+		('article_category', 'artcat','ac'),
+		('categories_relations', 'catcat', 'cc')
+	]
+	
+	for (inName, outName, mode) in transformation_list
+		inPath = path.join(inDir,inName+'.csv')
+		outPath = path.join(outDir,inName+'.txt')
+		writeTransformation(inPath, outPath, mode)
