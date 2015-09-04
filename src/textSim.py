@@ -35,7 +35,7 @@ def download_ressources():
 	nltk.download('maxent_treebank_pos_tagger') # POS tagger
 	nltk.download('wordnet') # Wordnet ...
 
-if __name__ = "__main__":
+if __name__ == "__main__":
 	print "Downloading the neccessary resources"
 	download_ressources()
 	print "Done"
