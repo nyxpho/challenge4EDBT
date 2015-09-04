@@ -87,7 +87,6 @@ Users can obtain more information via links on the page. However:
 \item evaluating existing links relevance is hard
 \end{itemize}
 
-
 \includegraphics[width=0.5\textwidth, height=0.2\paperheight]{media/challenge.eps}
 
 \hspace{-50mm}
@@ -171,15 +170,16 @@ intersect & different\\
 \begin{frame}
 We extend the Jaccard similarity coefficient to account for the specifics of Wikipedia:
 \begin{align*}	
-\wikiJack{f}{s1}{s2} =&\ \frac{min(\setProximity{f}{s1}{s2}, \setProximity{f}{s2}{s1})}{min(|s1|,|s2|)}\\
+\wikiJack{f}{s1}{S_2} =&\ \frac{min(\setProximity{f}{s1}{S_2}, \setProximity{f}{S_2}{s1})}{min(|s1|,|S_2|)}\\
 \\
-\setProximity{f}{s1}{s2} =&\ \sum\limits_{a \in s1} \max\limits_{b \in s2}(f(a,b))\\
+\setProximity{f}{s1}{S_2} =&\ \sum\limits_{a \in s1} \max\limits_{b \in S_2}(f(a,b))\\
 \end{align*}
 
-Observe that this new coefficient preserves the similarity between two sets if one or both are extended with similar content.
+Observe that this new coefficient preserves the similarity between two sets if one or both are extended with similar content and that $ 0 \leq \wikiJack{f}{S_1}{S_2} \leq 1 $.
 
-Also $ 0 \leq \wikiJack{f}{s1}{s2} \leq 1 $.
-  
+\begin{block}{The original Jaccard similarity}
+$$$$
+\end{block}
 \end{frame}
 
 
@@ -262,11 +262,12 @@ where $a_1$ and $a_2$ are two Wikipedia articles. The constants need to be fine 
 \section{Results}
 \begin{frame}{Implementation}
 
-Python
+\includegraphics[scale=0.15]{media/python-logo.eps}
 
 \bigskip
 
-PostgreSQL
+
+\includegraphics[scale=0.1]{media/postgres-logo.eps}
 
 \bigskip
 
