@@ -88,32 +88,20 @@ Users can obtain more information via links on the page. However:
 \end{itemize}
 
 
+\includegraphics[width=0.5\textwidth, height=0.2\paperheight]{media/challenge.eps}
 
-%\begin{block}{Goal}
-%Computing
-%\end{block}
-
-\end{frame}
-
-\begin{frame}{Challenge}
-
-
-\begin{center}
-
-
+\hspace{-50mm}
 \begin{itemize}
 \item Compute similarity between articles.
-\bigskip
 \item Infer new links between articles.
 \end{itemize}
 
-\includegraphics[width=0.5\textwidth, height=0.2\paperheight]{media/challenge.eps}
-
-\end{center}
-
 \end{frame}
 
+
+
 \section{Our approach}
+
 
 \begin{frame}{When are two pages similar?}
 
@@ -125,7 +113,7 @@ Users can obtain more information via links on the page. However:
 \begin{itemize}
 \item Text
 
-\bigskip
+\smallskip
 
 \item Context
 \begin{itemize}
@@ -136,7 +124,7 @@ Users can obtain more information via links on the page. However:
 \end{itemize}
 
 \end{block}
-
+\vspace{1cm}
 \begin{tabular}{c | c}
 extended & including\\
 \hline
@@ -145,7 +133,7 @@ intersect & different\\
 
 \end{minipage}
 
-
+&
 
 \begin{minipage}{.6\textwidth}
 \begin{tabular}{c | c}
@@ -165,47 +153,7 @@ intersect & different\\
 
 \end{frame}
 
-\begin{frame}{Sources of similarity}
 
-
-What is the similarity between articles $a_1$ and $a_2$  if we take into account the categories they belong to and the relations between categories?
-
-
-\begin{center}
-
-\includegraphics[width=0.6\textwidth, height=0.4\paperheight]{media/sim1.eps}
-
-\end{center}
-
-\end{frame}
-
-
-\begin{frame}{Sources of similarity}
-
-What is the similarity between articles $a_1$ and $a_2$  if we take into account the categories they belong to and the relations between categories?
-
-\begin{center}
-
-\includegraphics[width=0.6\textwidth, height=0.4\paperheight]{media/sim1.1.eps}
-
-\end{center}
-
-\end{frame}
-
-
-\begin{frame}{Sources of similarity}
-
-
-What is the similarity between articles $a_1$ and $a_2$  if we take into account the categories they belong to and the relations between categories?
-
-
-\begin{center}
-
-\includegraphics[width=0.6\textwidth, height=0.4\paperheight]{media/sim0.5.eps}
-
-\end{center}
-
-\end{frame}
 %\begin{frame}{Intuition: Context}
 
 
@@ -250,9 +198,52 @@ We apply this measure on all our sources of similarity:
 \end{align*}
 \end{frame}
 
+
+\begin{frame}{Sources of similarity}{Categories}
+
+
+What is the similarity between articles $a_1$ and $a_2$  if we take into account the categories they belong to and the relations between categories?
+
+
+\begin{center}
+
+\includegraphics[width=0.6\textwidth, height=0.4\paperheight]{media/sim1.eps}
+
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}{Sources of similarity}{Categories}
+
+What is the similarity between articles $a_1$ and $a_2$  if we take into account the categories they belong to and the relations between categories?
+
+\begin{center}
+
+\includegraphics[width=0.6\textwidth, height=0.4\paperheight]{media/sim1.1.eps}
+
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}{Sources of similarity}{Categories}
+
+
+What is the similarity between articles $a_1$ and $a_2$  if we take into account the categories they belong to and the relations between categories?
+
+
+\begin{center}
+
+\includegraphics[width=0.6\textwidth, height=0.4\paperheight]{media/sim0.5.eps}
+
+\end{center}
+
+\end{frame}
+
 \begin{frame}{Wikipedia similarity}
 
-By aggregating the previous components, we get the Wikipedia coefficient of similarity $\wsim$:
+By aggregating the similarity components, we get the Wikipedia coefficient of similarity $\wsim$:
 
 \begin{align*}
 	\wsim{a_1}{a_2} =&\ &\cst{0} \times \contextSim{a_1}{a_2} \\
