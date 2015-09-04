@@ -8,34 +8,53 @@ Compute context similarity
 import sys,os,re,time
 from igraph import *
 
-gArtArt = Graph.Read_Ncol("test/artart.txt", names=True, weights="if_present", directed=True)
-gArtCat = Graph.Read_Ncol("test/artcat.txt", names=True, weights="if_present", directed=True)
-gCatCat = Graph.Read_Ncol("test/catcat.txt", names=True, weights="if_present", directed=True)
+gArtArt = Graph.Read_Ncol("artart.txt", names=True, weights="if_present", directed=True)
+gArtCat = Graph.Read_Ncol("artcat.txt", names=True, weights="if_present", directed=True)
+gCatCat = Graph.Read_Ncol("catcat.txt", names=True, weights="if_present", directed=True)
+
+print "size of artart " + str(len(gArtArt.vs))
+print "size of catcat " + str(len(gCatCat.vs))
+print "size of artcat " + str(len(gArtCat.vs))
 
 def inLinksSim(fArticle, sArticle):
-	fArticle = 'a'+str(fArticle)
-	sArticle = 'a'+str(sArticle)
-	fArticleIn = set(gArtArt.neighbors(fArticle, mode="in"))
-	sArticleIn = set(gArtArt.neighbors(sArticle, mode="in"))
-	return len(fArticleIn.intersection(sArticleIn))/max(1, min(len(fArticleIn), len(sArticleIn)))
+	if fArticle[0] != 'a':
+		fArticle = 'a'+str(fArticle)
+	if sArticle[0] != 'a':
+		sArticle = 'a'+str(sArticle)
+	if fArticle == sArticle:
+		return 1.
+	try:
+		fArticleIn = set(gArtArt.neighbors(fArticle, mode="in"))
+		sArticleIn = set(gArtArt.neighbors(sArticle, mode="in"))
+		return len(fArticleIn.intersection(sArticleIn))/float(max(1, min(len(fArticleIn), len(sArticleIn))))
+	except ValueError:
+		return 0.
 
 def outLinksSim(fArticle, sArticle):
-	fArticle = 'a'+str(fArticle)
-	sArticle = 'a'+str(sArticle)
-	fArticleOut = set(gArtArt.neighbors(fArticle, mode="out"))
-	sArticleOut = set(gArtArt.neighbors(sArticle, mode="out"))
-	return len(fArticleOut.intersection(sArticleOut))/max(1, min(len(fArticleOut), len(sArticleOut)))
+	if fArticle[0] != 'a':
+		ifArticle = 'a'+str(fArticle)
+	if sArticle[0] != 'a':
+		sArticle = 'a'+str(sArticle)
+	if fArticle == sArticle:
+		return 1.
+	try:
+		fArticleOut = set(gArtArt.neighbors(fArticle, mode="out"))
+		sArticleOut = set(gArtArt.neighbors(sArticle, mode="out"))
+		return len(fArticleOut.intersection(sArticleOut))/float(max(1, min(len(fArticleOut), len(sArticleOut))))
+	except ValueError:
+		return 0.
 
 def catSim1(fArticle, sArticle):
 	
-    """
+	"""
 	This function returns 2 lists of lists:
 	- the first list contains a list of the extended categories of the first article
 	- the second list contains a list of the extended categories of the second article
 	"""
-	
-	fArticle = 'a'+str(fArticle)
-	sArticle = 'a'+str(sArticle)
+	if fArticle[0] != 'a':	
+		fArticle = 'a'+str(fArticle)
+	if sArticle[0] != 'a':
+		sArticle = 'a'+str(sArticle)
 	firstACat = articleCat(fArticle)
 	secondACat = articleCat(sArticle)
 	firstList = []
@@ -48,15 +67,36 @@ def catSim1(fArticle, sArticle):
 
 
 def catSim(fArticle, sArticle):
-   fExt = [exploration(cat) for cat in articleCat('a'+str(fArticle))]
-   sExt = [exploration(cat) for cat in articleCat('a'+str(sArticle))]
-   if not fExt or not sExt:
-	   return 0
-   fExtUnion = set.union(*fExt)
-   sExtUnion = set.union(*sExt)
-   wk12 = sum(1 for fext in fExt if fext.intersection(sExtUnion))
-   wk21 = sum(1 for sext in sExt if sext.intersection(fExtUnion))
-   return (min(wk12, wk21) / float(max(1, min(len(fExt),len(sExt)))))
+	if fArticle == sArticle:
+		return 1.
+	if fArticle[0] != 'a':
+		fArticle = 'a'+str(fArticle)
+	if sArticle[0] != 'a':
+		sArticle = 'a'+str(sArticle)
+	fExt = [exploration(cat) for cat in articleCat(str(fArticle))]
+	sExt = [exploration(cat) for cat in articleCat(str(sArticle))]  
+	if len(fExt) == 0 or len(sExt) == 0:
+		return 0
+	fExtUnion = set.union(*fExt)
+	sExtUnion = set.union(*sExt)
+	print fArticle +" " + sArticle + "\nfirst part "
+	wk12 = 0
+	for fext in fExt:
+		inters = fext.intersection(sExtUnion)
+		if len(inters) > 0:
+			print inters
+			wk12 +=1
+	wk21 = 0
+	print "\nsecond part"
+	for sext in sExt:
+		inters = sext.intersection(fExtUnion)
+		if len(inters) > 0:
+			print inters
+			wk21 += 1
+	print "\n"
+	#wk12 = sum(1 for fext in fExt if fext.intersection(sExtUnion))
+	#wk21 = sum(1 for sext in sExt if sext.intersection(fExtUnion))
+	return (min(wk12, wk21) / float(max(1, min(len(fExt),len(sExt)))))
 
 def articleCat(artName):
 	"""
@@ -76,15 +116,35 @@ def exploration(catName):
 	try:
 		cat_index_in_CatCat = gCatCat.vs.find(name=catName).index
 		bfsIt = gCatCat.bfsiter(cat_index_in_CatCat, mode="out")
-		explSet = {int(gCatCat.vs[cat.index]["name"][1:]) for cat in bfsIt}
-		explSet.add(int(catName[1:]))
+		#print depth
+		explSet = {gCatCat.vs[cat.index]["name"] for cat in bfsIt}
+		explSet.add(catName)
 		return explSet
 	except ValueError:
 		return set()
 
+def retrieveNames(fArticle, sArticle):
+	try:
+		fName = gArtArt.vs[fArticle]["name"]
+		sName = gArtArt.vs[sArticle]["name"]
+		return (fName, sName) 
+	except ValueError:
+		return (None,None)
+
+def noArticles():
+	return gArtArt.vcount()
+
+def contextSim(fArticle, sArticle, cstes)
+	sim = cstes[1]*inLinksSim(fArticle, sArticle) +
+		cstes[2]*outLinksSim(fArticle, sArticle) +
+		(1-cstes[1]-cstes[2])*catSim(fArticle, sArticle)
+	print inLinksSim(fArticle, sArticle), outLinksSim(fArticle, sArticle), catSim(fArticle, sArticle)
+	print sim
+	return sim
+	
 
 if __name__ == "__main__":
 	#print catSim('a1', 'a2')
 	#me = catSim1(1, 2)
 	#print smthg_sim(interSim, me['first'], me['second'])
-	print outLinksSim(1,2)
+	print catSim('1','2')
