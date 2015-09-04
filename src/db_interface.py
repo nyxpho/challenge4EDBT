@@ -168,7 +168,7 @@ class WikipediaDatabaseInterface(DatabaseInterface):
 	
 	
 	_select_share_inlink_query = (
-		"SELECT ln2.article_to text FROM "+ config.LINK_TABLE + " "
+		"SELECT ln2.article_to FROM "+ config.LINK_TABLE + " "
 		"JOIN " + config.LINK_TABLE + " ON ln1.article_from = ln2.article_from "
 		"WHERE ln1.article_to = %s"
 	)
@@ -181,7 +181,7 @@ class WikipediaDatabaseInterface(DatabaseInterface):
 	
 	
 	_select_share_outlink_query = (
-		"SELECT ln2.article_from text FROM "+ config.LINK_TABLE + " "
+		"SELECT ln2.article_from FROM "+ config.LINK_TABLE + " "
 		"JOIN " + config.LINK_TABLE + " ON ln1.article_to = ln2.article_to "
 		"WHERE ln1.article_from = %s"
 	)
