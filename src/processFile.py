@@ -11,20 +11,23 @@ def writeTransformation(inPath, outPath, mode):
     ac - a for first, c for  second
     """
     f = open(inPath)
-    line = f.readline()
-    line = f.readline()
     rb = open(outPath, "w")
-    while line is not None:
-        line = line.replace("\"","")
-        ids = line.strip().split(",")
-        if mode =='aa':
-            rb.write('a'+ids[0]+ " " + 'a'+ids[1]+"\n")
-        if mode =='ac':
-            rb.write('a'+ids[0]+ " " + 'c'+ids[1]+"\n")
-        if mode =='cc':
-            rb.write('c'+ids[0]+ " " + 'c'+ids[1]+"\n")
-        line = f.readline()
+    
+    if mode =='aa':
+        mode_str= 'a%s a%s\n'
+    if mode =='ac':
+        mode_str= 'a%s c%s\n'
+    if mode =='cc':
+        mode_str= 'c%s c%s\n'
+    
+    line = f.readline() #skip the first line of header
+    for line in f:
+        ids = line.replace("\"","").strip().split(",")
+        if len(ids) == 2:
+            rb.write(mode_str %(ids[0], ids[1]))
+    
     rb.close()
+    f.close()
 
 if __name__ == "__main__":
 	inDir = sys.argv[1] if len(sys.argv)>1 else '.'
