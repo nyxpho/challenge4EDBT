@@ -50,7 +50,7 @@ if __name__ == "__main__":
 WDI = db_interface.WikipediaDatabaseInterface()
 
 CLEANING_TEXT_PATTERN = re.compile(
-	r'(?:\{\{[^\}]*(\}[^\}]*)*\}\})|'
+	r'(\{\{[^\}]*(?:\}[^\}]+)*\}\})|'
 	r'(?:\AREDIRECT)|'
 	r'(?:<ref>([^<]*(<(?!/ref>))?)*</ref>)'#Cannot detect ref inside ref
 )
